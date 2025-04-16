@@ -5,17 +5,26 @@ import { Logger } from '@nestjs/common';
 import { initSecurityConfig } from './startup/security.config';
 import { initSwaggerConfig } from './startup/swagger.cofig';
 import { initGlobalConfig } from './startup/global.config';
+import * as dotenv from 'dotenv';
+import { NextFunction } from 'express';
+import { Request, Response } from 'express';
 
+dotenv.config({ path: '.env.local' });
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
-
+  
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    res.setHeader('X-Dont-Serve-Favicon', 'true');
+    next();
+  });
   initSecurityConfig(app);
-
   initSwaggerConfig(app);
 
   initGlobalConfig(app);
 
+
   await app.listen(process.env.PORT);
 }
 bootstrap();
+
