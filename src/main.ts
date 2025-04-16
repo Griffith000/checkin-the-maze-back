@@ -15,8 +15,15 @@ async function bootstrap() {
   app.enableCors();
   
   app.use((req: Request, res: Response, next: NextFunction) => {
-    res.setHeader('X-Dont-Serve-Favicon', 'true');
+     res.setHeader(
+      'Content-Security-Policy',
+      "default-src 'self'; " +
+      "style-src 'self' 'unsafe-inline'; " + 
+      "script-src 'self'; " +
+      "img-src 'self' data:;"
+    );
     next();
+ 
   });
   initSecurityConfig(app);
   initSwaggerConfig(app);
