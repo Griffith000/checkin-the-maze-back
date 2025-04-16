@@ -31,7 +31,7 @@ async function bootstrap() {
   initGlobalConfig(app);
 
 
-  await app.listen(process.env.PORT);
+  await app.listen(process.env.PORT || 8080);
 }
 bootstrap();
 
